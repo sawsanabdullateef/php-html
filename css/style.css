@@ -1,0 +1,31 @@
+button[type=submit]{
+    color: #000203;
+    padding: 15px 32px;
+    text-align: center;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    background-color: #209ef7;
+                 
+    
+  }
+  body{
+      
+      background-color:#b4e3fa
+  }
+  img{
+      padding: 10px;
+  }
+  table{
+      border: 3px;
+      width:300;
+      background-color:#4bb8e7 ;
+
+  }
+  .center{
+      text-align: center;
+  }
+  table{
+      width: 20%;
+      height: 70%;
+  }
