@@ -4,7 +4,7 @@ $username="root";
 $password="";
 $db="sawsan";
 // start connection with database
-$conn = new mysqli($servername, $username, $password);
+$conn = new mysqli($servername, $username, $password,$db);
 // Check connection
 
 if ($conn->connect_error){

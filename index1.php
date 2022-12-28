@@ -5,11 +5,15 @@ if(isset($_POST['login'])){
 	$user_name= $_POST['uname'];
 	$password= $_POST['psw'];
 
-	$sql= "select * from users where user_name='.$user_name.' and user_password= '.$password'";
-	$result= $conn->query($sql);
-	$record= $result->num_rows();
-	if($record>0){
-		echo "sucessfull";
+	$sql= "select count(1) as num_rows from users where user_name= ? and user_password= ?";
+	$result= $conn->prepare($sql);
+	$result->bind_param("ss",$user_name,$password);
+	$result->execute();
+	$record= $result->get_result();
+	$rows = $record->fetch_assoc();
+
+	if ($rows['num_rows'] > 0){
+		echo "<script> location.href='home.php';</script>";
 	}
 	else{
 		echo "user name or password is wrong!!";

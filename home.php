@@ -1,3 +1,27 @@
+<?php
+require "conn.php";
+
+if(isset($_POST['save'])){
+	$user_name= $_POST['uname'];
+	$password= $_POST['psw'];
+
+	 $sql= "insert into users( user_name, user_password) values (?,?)";
+  //$sql= " INSERT INTO `users`( `user_name`, `user_password`) VALUES (?,?)";
+	$result= $conn->prepare($sql);
+	$result->bind_param("ss",$user_name,$password);
+	$result->execute();
+	$record= $result->get_result();
+	
+
+	/* if ($rows['num_rows'] > 0){
+		echo "<script> location.href='home.php';</script>";
+	}
+	else{
+		echo "user name or password is wrong!!";
+	} */
+}
+?>
+
 <!DOCTYPE html>
 <html>
    <head>
@@ -9,7 +33,8 @@
         <title>
              home page
         </title>
-       <link rel="stylesheet"  href="css/style.css"> 
+      
+       <link rel="stylesheet"  href="css/style1.css"> 
       <style>
         body {
           margin: 0;
@@ -59,17 +84,24 @@
                         <a href="#about">About</a>
                       </div> 
 
-                      <div class="page">
-                        <div class="left">
-                            <ul>
-                              <li>home</li>
-                              <li>users</li>
-                        </div>
-                        <div class="right">
-                          right
-                        </div>
-                      </div>
+                     
+                      
             </form>
+<center>
+            <form method="post" action="home.php">
+              <h2> add user </h2>
+                      <div class="container">
+                            <label><b>Username</b></label>
+                            <input type="text" placeholder="Enter Username" name="uname" required>
+                              <br>
+                            <label><b>Password</b></label>
+                            <input type="text" placeholder="Enter Password" name="psw" required>
+                            <br>
+                            
+                            <button type="submit" name ="save" id ="save">save</button>
+                    </div>
+</form>
+</center>
             
         </P>
         
