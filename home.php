@@ -13,13 +13,49 @@ if(isset($_POST['save'])){
 	$record= $result->get_result();
 	
 
-	/* if ($rows['num_rows'] > 0){
-		echo "<script> location.href='home.php';</script>";
+	 if ($result){
+		echo "<script> alert(' scussesfull !!!!');</script>";
 	}
 	else{
-		echo "user name or password is wrong!!";
-	} */
+		echo "<script> alert(' ERROR !!!!');</script>";
+	} 
 }
+
+// RETRIVE DATA ......
+
+if(!empty($_GET['user_id'])){
+    $user_id = $_GET['user_id'];
+   
+  
+     $sql= "SELECT * FROM USERS WHERE ID=?";
+    $result= $conn->prepare($sql);
+    $result->bind_param("i",$user_id);
+    $result->execute();
+    $record= $result->get_result();
+    $rowss = $record->fetch_assoc();
+    
+}
+if(isset($_GET['edit'])){
+if(!empty($_GET['user_id'])){
+  $user_id = $_GET['user_id'];
+
+   $sql= "UPDATE USERS SET user_name =? , user_password=? WHERE ID=?";
+  $result= $conn->prepare($sql);
+  $result->bind_param("ssi",$user_id);
+  $result->execute();
+  $record= $result->get_result();
+  if ( $result->execute()){
+		echo "<script> alert(' Update scussesfull !!!!');</script>";
+	}
+	else{
+		echo "<script> alert(' ERROR !!!!');</script>";
+	} 
+  
+}
+}
+
+
+
 ?>
 
 <!DOCTYPE html>
@@ -69,9 +105,7 @@ if(isset($_POST['save'])){
         </style>
    </head>
     <body>
-        <P>
-            
-                <p>&nbsp&nbsp&nbsp</p><p>&nbsp&nbsp&nbsp</p>
+        <P></p>
                 <h3 style="color:rgb(13, 132, 141);" dir="ltr"> LOGIN SCREEN
                 </h3>
                 
@@ -89,16 +123,64 @@ if(isset($_POST['save'])){
             </form>
 <center>
             <form method="post" action="home.php">
+            <input type="hidden" name="uid" name="uid">
               <h2> add user </h2>
                       <div class="container">
                             <label><b>Username</b></label>
-                            <input type="text" placeholder="Enter Username" name="uname" required>
-                              <br>
+                            <input type="text" placeholder="Enter Username" name="uname" value="<?php echo $rowss['user_name'];?>" required >
+</br>
                             <label><b>Password</b></label>
-                            <input type="text" placeholder="Enter Password" name="psw" required>
-                            <br>
+                            <input type="text" placeholder="Enter Password" name="psw" value= "<?php echo $rowss['user_password'];?>" required>
+</br>
                             
                             <button type="submit" name ="save" id ="save">save</button>
+                            <button type="submit" name ="edit" id ="edit">Edit</button>
+                            <button type="submit" name ="delete" id ="delete">Delete</button>
+                    </div>
+
+                    <div class="container">
+                            
+                            <?php
+                            $sql="SELECT * FROM `users`";
+                            $result= $conn->prepare($sql);
+                            $result->execute();
+                            $record= $result->get_result();
+                           while($rows = $record->fetch_assoc()){
+                            ?>
+                     <table>
+                   
+                    <tr >
+                        <td><label><b>Username</label> </td>
+                        <td><label><b></label> </td>
+                        <td><label><b>password</label> </td>
+                        <td><label><b></label> </td>
+                        <td><label><b>Edit</label> </td>
+                        <td><label><b></label> </td>
+                        <td><label><b>Delete</label> </td>
+                        
+                    </tr>
+                    <tr>
+                        <td><?php echo $rows['user_name'];?></td>
+                        <td><label><b></label> </td>
+                        <td><?php echo $rows['user_password'];?></td>
+                        <td><label><b></label> </td>
+                        <td> <a href="home.php?user_id=<?php echo $rows['id'];?>">Edit</a> 
+                        <td><label><b></label> </td>
+                        <td> <a href="home.php"?duser_id=<?php echo $rows['id'];?>">Delete</a> </td> 
+                    </tr>
+                   
+                       
+                </table>
+                         <!--    <label><b>Username</b></label>
+                            <input type="text"  name="r_uname" values = "<?php echo $rows['user_name'];?>" disabled>
+                              <br>
+                            <label><b>Password</b></label>
+                            <input type="text"  name="r_psw" values = "<?php echo $rows['user_password'];?>" disabled>
+                            <br> -->
+                            <?php
+                           }
+                           ?>
+
                     </div>
 </form>
 </center>
