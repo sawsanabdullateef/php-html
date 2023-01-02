@@ -32,18 +32,19 @@ if(!empty($_GET['user_id'])){
     $result->bind_param("i",$user_id);
     $result->execute();
     $record= $result->get_result();
-    $rowss = $record->fetch_assoc();
+    $rows = $record->fetch_assoc();
     
 }
-if(isset($_GET['edit'])){
-if(!empty($_GET['user_id'])){
-  $user_id = $_GET['user_id'];
+if(isset($_POST['edit'])){
+  $user_name= $_POST['uname'];
+	$password= $_POST['psw'];
+  $user_id = $_POST['uid'];
 
    $sql= "UPDATE USERS SET user_name =? , user_password=? WHERE ID=?";
   $result= $conn->prepare($sql);
-  $result->bind_param("ssi",$user_id);
+  $result->bind_param("ssi",$user_name,$password,$user_id);
   $result->execute();
-  $record= $result->get_result();
+ 
   if ( $result->execute()){
 		echo "<script> alert(' Update scussesfull !!!!');</script>";
 	}
@@ -52,7 +53,25 @@ if(!empty($_GET['user_id'])){
 	} 
   
 }
+if(isset($_POST['delete'])){
+  $user_name= $_POST['uname'];
+	$password= $_POST['psw'];
+  $user_id = $_POST['uid'];
+
+   $sql= "DELETE FROM USERS WHERE ID=?";
+  $result= $conn->prepare($sql);
+  $result->bind_param("i",$user_id);
+  $result->execute();
+ 
+  if ( $result->execute()){
+		echo "<script> alert(' DELETE scussesfull !!!!');</script>";
+	}
+	else{
+		echo "<script> alert(' ERROR !!!!');</script>";
+	} 
+  
 }
+
 
 
 
@@ -123,14 +142,14 @@ if(!empty($_GET['user_id'])){
             </form>
 <center>
             <form method="post" action="home.php">
-            <input type="hidden" name="uid" name="uid">
+            <input type="hidden"  name="uid" value="<?php echo @$rows['id'];?>">
               <h2> add user </h2>
                       <div class="container">
                             <label><b>Username</b></label>
-                            <input type="text" placeholder="Enter Username" name="uname" value="<?php echo $rowss['user_name'];?>" required >
+                            <input type="text" placeholder="Enter Username" name="uname"  value="<?php echo @$rows['user_name'];?>"  required >
 </br>
                             <label><b>Password</b></label>
-                            <input type="text" placeholder="Enter Password" name="psw" value= "<?php echo $rowss['user_password'];?>" required>
+                            <input type="text" placeholder="Enter Password" name="psw"  value= "<?php echo @$rows['user_password'];?>"  required>
 </br>
                             
                             <button type="submit" name ="save" id ="save">save</button>
@@ -166,7 +185,7 @@ if(!empty($_GET['user_id'])){
                         <td><label><b></label> </td>
                         <td> <a href="home.php?user_id=<?php echo $rows['id'];?>">Edit</a> 
                         <td><label><b></label> </td>
-                        <td> <a href="home.php"?duser_id=<?php echo $rows['id'];?>">Delete</a> </td> 
+                        <td> <a href="home.php?user_id=<?php echo $rows['id'];?>">Delete</a> 
                     </tr>
                    
                        
